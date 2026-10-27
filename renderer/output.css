@@ -1,0 +1,23 @@
+html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; }
+body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; user-select: none; }
+body.fullscreen { cursor: none; }
+body.windowed.frameless { -webkit-app-region: drag; } /* tanpa bingkai: geser dengan drag */
+
+#stage {
+  height: 100%; box-sizing: border-box; padding: 2vmin;
+  display: grid; align-items: center; justify-items: center; gap: 2vmin;
+}
+#stage.one { grid-template-columns: 1fr; }
+#stage.two { grid-template-columns: 1fr 1fr; }
+
+.cell { text-align: center; width: 100%; }
+.label { font-weight: 600; letter-spacing: .04em; opacity: .9; }
+.time { font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; white-space: nowrap; }
+
+.one .time { font-size: min(36vh, 24vw); }
+.one .label { font-size: min(8vh, 6vw); margin-bottom: 2vh; }
+.two .time { font-size: min(30vh, 13vw); }
+.two .label { font-size: min(7vh, 4vw); margin-bottom: 2vh; }
+
+.blink { animation: blink .6s steps(2, start) infinite; }
+@keyframes blink { 50% { opacity: .25; } }

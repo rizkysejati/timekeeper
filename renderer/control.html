@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Timekeeper - Kontrol</title>
+  <link rel="stylesheet" href="control.css" />
+</head>
+<body>
+  <header>
+    <h1>Timekeeper <span class="ver">V1</span></h1>
+    <div class="global">
+      <button class="btn go" data-cmd="start" data-id="ALL">▶ Mulai semua</button>
+      <button class="btn" data-cmd="pause" data-id="ALL">⏸ Jeda semua</button>
+      <button class="btn" data-cmd="reset" data-id="ALL">↺ Reset semua</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="timers" class="timers"></section>
+
+    <section class="card">
+      <h2>Output (layar penonton)</h2>
+      <div class="row">
+        <label>Mode
+          <select id="outMode">
+            <option value="fullscreen">Layar penuh di monitor</option>
+            <option value="window">Jendela biasa (untuk OBS Window Capture)</option>
+          </select>
+        </label>
+        <label>Tata letak
+          <select id="outLayout">
+            <option value="combined">Gabungan (1 jendela, Timer A + B)</option>
+            <option value="split">Terpisah (Timer A dan Timer B jendela sendiri-sendiri)</option>
+          </select>
+        </label>
+        <label><span id="outDisplayLabel">Monitor</span> <select id="outDisplay"></select></label>
+        <label id="outDisplayBWrap" style="display:none">Monitor Timer B <select id="outDisplayB"></select></label>
+        <button id="refreshDisplays" class="btn" title="Baca ulang daftar monitor">&#8635; Segarkan monitor</button>
+        <button id="outToggle" class="btn go">Buka output</button>
+      </div>
+      <p class="hint" id="displayInfo"></p>
+      <div class="row">
+        <button id="fsToggle" class="btn" disabled>&#9974; Layar penuh</button>
+        <label class="chk"><input type="checkbox" id="onTop" disabled /> Selalu di atas jendela lain</label>
+        <span class="hint">Aktif saat output terbuka. Di jendela output: klik dua kali / F11 = layar penuh, Esc = keluar.</span>
+      </div>
+      <div class="row">
+        <label>Latar
+          <select id="bg">
+            <option value="black">Hitam</option>
+            <option value="transparent">Transparan</option>
+            <option value="color">Warna lain (mis. hijau chroma key)</option>
+          </select>
+        </label>
+        <label>Warna latar <input type="color" id="bgColor" /></label>
+        <label>Warna teks <input type="color" id="textColor" /></label>
+        <label>Font
+          <select id="fontFamily">
+            <option value="'Segoe UI', Arial, sans-serif">Segoe UI</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="'Courier New', monospace">Courier New</option>
+            <option value="Impact, 'Arial Black', sans-serif">Impact</option>
+            <option value="Georgia, serif">Georgia</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="dual" /> Tampilkan 2 timer</label>
+        <label class="chk"><input type="checkbox" id="showLabel" /> Tampilkan nama/label</label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Peringatan warna</h2>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="warnEnabled" /> Aktif</label>
+        <label>Tahap 1 pada (detik) <input type="number" id="warn1At" min="0" /></label>
+        <label>Warna <input type="color" id="warn1Color" /></label>
+        <label>Tahap 2 pada (detik) <input type="number" id="warn2At" min="0" /></label>
+        <label>Warna <input type="color" id="warn2Color" /></label>
+      </div>
+      <p class="hint">Di atas tahap 1, warna timer mengikuti "Warna teks". Mau hijau di awal? Set warna teks jadi hijau.</p>
+    </section>
+
+    <section class="card">
+      <h2>Alarm saat waktu habis</h2>
+      <div class="row">
+        <label>Suara
+          <select id="alarmType">
+            <option value="bel">Bel</option>
+            <option value="beep">Beep</option>
+            <option value="buzzer">Buzzer</option>
+            <option value="off">Mati</option>
+          </select>
+        </label>
+        <label>Volume <input type="range" id="alarmVolume" min="0" max="1" step="0.05" /></label>
+        <button id="alarmTest" class="btn">Tes suara</button>
+      </div>
+      <div class="row">
+        <label>Bunyi hitung mundur
+          <select id="countdownFrom">
+            <option value="0">Mati</option>
+            <option value="3">3 detik terakhir</option>
+            <option value="5">5 detik terakhir</option>
+            <option value="10">10 detik terakhir</option>
+          </select>
+        </label>
+        <button id="countdownTest" class="btn">Tes tik</button>
+      </div>
+      <p class="hint">Alarm berbunyi lewat jendela kontrol ini (komputer operator).</p>
+    </section>
+
+    <section class="card">
+      <h2>Hotkey (saat jendela ini aktif)</h2>
+      <p class="hint"><b>Spasi</b> mulai/jeda semua &nbsp; <b>1</b> mulai/jeda Timer A &nbsp; <b>2</b> mulai/jeda Timer B &nbsp; <b>R</b> reset semua</p>
+    </section>
+  </main>
+
+  <script src="control.js"></script>
+</body>
+</html>
