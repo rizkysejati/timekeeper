@@ -1,0 +1,27 @@
+:root { --bg:#fdf6ff; --card:#fff; --line:#eadcf5; --ink:#3b2f4a; --muted:#85779a; --mint:#b8f0d8; --pink:#ffd0d8; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.4 'Segoe UI', Arial, sans-serif; }
+[hidden] { display: none !important; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: linear-gradient(90deg,#d9c8ff,#bfe3ff); }
+.conn { font-size: 12px; background: #fff; border-radius: 999px; padding: 2px 10px; }
+.conn.ok { color: #1f9d6b; } .conn.bad { color: #d6336c; }
+main { max-width: 520px; margin: 0 auto; padding-bottom: 30px; }
+.all { display: flex; gap: 10px; padding: 12px 16px 0; }
+.all .btn { flex: 1; }
+.t { background: var(--card); border: 1px solid var(--line); border-radius: 16px; margin: 12px 16px; padding: 14px; text-align: center; }
+.t.running { border-color: #7ad9b0; box-shadow: 0 0 0 3px var(--mint); }
+.t.finished { border-color: #ff8fa3; box-shadow: 0 0 0 3px var(--pink); }
+.lbl { font-weight: 600; } .seg { color: var(--muted); font-size: 14px; min-height: 20px; }
+.disp { font-size: 22vw; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+@media (min-width: 520px) { .disp { font-size: 110px; } }
+.disp.over { color: #e11d48; }
+.row { display: flex; gap: 8px; margin-top: 8px; }
+.row .btn { flex: 1; }
+.btn { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 12px; padding: 14px 8px; font-size: 16px; cursor: pointer; touch-action: manipulation; }
+.btn:active { background: #f4ecff; }
+.btn.go { background: var(--mint); border-color: #8fdcbc; font-weight: 600; }
+.btn.stop { background: var(--pink); border-color: #ff9fb0; font-weight: 600; }
+.pin { max-width: 320px; margin: 18vh auto 0; text-align: center; padding: 0 16px; }
+.pin input { width: 100%; font-size: 24px; text-align: center; padding: 10px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; }
+.pin .btn { width: 100%; }
+.msg { color: #d6336c; min-height: 22px; }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>Timekeeper - Remote</title>
+  <link rel="stylesheet" href="remote.css" />
+</head>
+<body>
+  <div id="pin" class="pin" hidden>
+    <h1>Timekeeper</h1>
+    <p>Masukkan PIN yang tampil di aplikasi di komputer.</p>
+    <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" />
+    <button id="pinBtn" class="btn go">Masuk</button>
+    <p id="pinMsg" class="msg"></p>
+  </div>
+  <main id="app" hidden>
+    <header><b>Timekeeper</b><span id="conn" class="conn">menyambung...</span></header>
+    <div class="all">
+      <button class="btn go" data-act="toggle" data-id="ALL">Mulai/Jeda semua</button>
+      <button class="btn" data-act="reset" data-id="ALL">Reset semua</button>
+    </div>
+    <div id="timers"></div>
+  </main>
+  <script src="web-api.js"></script>
+  <script src="timefmt.js"></script>
+  <script src="remote.js"></script>
+</body>
+</html>

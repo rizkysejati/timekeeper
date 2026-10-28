@@ -16,17 +16,6 @@ if (params.get('frameless') === '1') document.body.classList.add('frameless');
 const stage = document.getElementById('stage');
 const only = params.get('timer'); // 'A' | 'B' | 'ALL'
 
-function fmt(ms) {
-  // Dibulatkan ke atas supaya 00:00 baru muncul saat benar-benar habis.
-  const total = Math.ceil(ms / 1000);
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-  const mm = String(m).padStart(2, '0');
-  const ss = String(s).padStart(2, '0');
-  return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
-}
-
 function colorFor(t, s) {
   if (!s.warnEnabled) return s.textColor;
   const sec = Math.ceil(t.remaining / 1000);
@@ -43,24 +32,34 @@ function render(state) {
 
   document.body.style.background =
     s.bg === 'transparent' ? 'transparent' : s.bg === 'color' ? s.bgColor : '#000';
-  document.body.style.fontFamily = s.fontFamily;
+  document.body.style.fontFamily = TF.fontFamily(s);
+  document.documentElement.style.setProperty('--scale', String((Number(s.fontScale) || 100) / 100));
 
   stage.className = list.length === 1 ? 'one' : 'two';
   // Bangun ulang hanya kalau jumlah timer berubah, selain itu update isi saja.
   if (stage.children.length !== list.length) {
-    stage.innerHTML = list.map(() => '<div class="cell"><div class="label"></div><div class="time"></div></div>').join('');
+    stage.innerHTML = list.map(() => '<div class="cell"><div class="label"></div><div class="seg"></div><div class="time"></div></div>').join('');
   }
   list.forEach((t, i) => {
     const cell = stage.children[i];
     const label = cell.querySelector('.label');
     const time = cell.querySelector('.time');
+    const seg = cell.querySelector('.seg');
+    const isDown = !t.mode || t.mode === 'down';
+    seg.textContent = t.segName || '';
+    seg.style.display = s.showSegment && t.segName && isDown ? '' : 'none';
+    seg.style.color = s.textColor;
     label.textContent = t.label;
     label.style.display = s.showLabel ? '' : 'none';
     label.style.color = s.textColor;
-    time.textContent = fmt(t.remaining);
-    time.style.color = colorFor(t, s);
-    time.classList.toggle('blink', t.finished);
+    time.textContent = TF.text(t, s);
+    time.style.fontWeight = String(s.fontWeight || 700);
+    time.style.color = isDown ? colorFor(t, s) : s.textColor;       // peringatan warna hanya untuk hitung mundur
+    time.classList.toggle('blink', isDown && t.finished && !t.running); // lembur yang masih jalan tidak berkedip
   });
 }
 
-window.api.onState(render);
+let lastState = null;
+window.api.onState((st) => { lastState = st; render(st); });
+// Jam digital harus bergerak tiap detik walau tidak ada perubahan state.
+setInterval(() => { if (lastState && lastState.timers.some((t) => t.mode === 'clock')) render(lastState); }, 500);

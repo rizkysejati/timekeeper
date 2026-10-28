@@ -7,7 +7,7 @@
 </head>
 <body>
   <header>
-    <h1>Timekeeper <span class="ver">V1</span></h1>
+    <h1>Timekeeper <span class="ver">V5</span></h1>
     <div class="global">
       <button class="btn go" data-cmd="start" data-id="ALL">▶ Mulai semua</button>
       <button class="btn" data-cmd="pause" data-id="ALL">⏸ Jeda semua</button>
@@ -63,11 +63,40 @@
             <option value="Georgia, serif">Georgia</option>
           </select>
         </label>
+        <label>Font sendiri (nama font terpasang) <input type="text" id="fontCustom" placeholder="mis. Bahnschrift" /></label>
+        <label>Ukuran (%) <input type="number" id="fontScale" min="30" max="200" step="5" /></label>
+        <label>Ketebalan
+          <select id="fontWeight">
+            <option value="400">Normal</option>
+            <option value="700">Tebal</option>
+            <option value="900">Sangat tebal</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="clock24" /> Jam digital 24 jam</label>
+        <label class="chk"><input type="checkbox" id="clockSeconds" /> Jam digital tampilkan detik</label>
       </div>
       <div class="row">
         <label class="chk"><input type="checkbox" id="dual" /> Tampilkan 2 timer</label>
         <label class="chk"><input type="checkbox" id="showLabel" /> Tampilkan nama/label</label>
+        <label class="chk"><input type="checkbox" id="showSegment" /> Tampilkan nama segmen</label>
       </div>
+    </section>
+
+    <section class="card">
+      <h2>Rundown &amp; lembur</h2>
+      <div class="row">
+        <label>Saat segmen habis
+          <select id="autoAdvance">
+            <option value="off">Berhenti saja</option>
+            <option value="load">Siapkan segmen berikutnya (tunggu Mulai)</option>
+            <option value="run">Pindah segmen dan langsung jalan</option>
+          </select>
+        </label>
+        <label class="chk"><input type="checkbox" id="overtime" /> Lembur: lanjut menghitung ke minus setelah 00:00</label>
+      </div>
+      <p class="hint">Rundown diatur di kartu tiap timer. Pindah otomatis hanya berlaku bila Lembur dimatikan. Saat Lembur aktif, pindah segmen manual (tombol Berikutnya atau tombol N).</p>
     </section>
 
     <section class="card">
@@ -86,15 +115,16 @@
       <h2>Alarm saat waktu habis</h2>
       <div class="row">
         <label>Suara
-          <select id="alarmType">
-            <option value="bel">Bel</option>
-            <option value="beep">Beep</option>
-            <option value="buzzer">Buzzer</option>
-            <option value="off">Mati</option>
-          </select>
+          <select id="alarmType"></select>
         </label>
         <label>Volume <input type="range" id="alarmVolume" min="0" max="1" step="0.05" /></label>
         <button id="alarmTest" class="btn">Tes suara</button>
+        <button id="soundAdd" class="btn">+ Tambah suara dari file...</button>
+        <button id="soundRemove" class="btn" disabled>Hapus suara ini</button>
+      </div>
+      <div class="row">
+        <label>Batas lama suara file (detik, 0 = sampai selesai) <input type="number" id="alarmMaxSec" min="0" max="120" /></label>
+        <span class="hint" id="soundMsg"></span>
       </div>
       <div class="row">
         <label>Bunyi hitung mundur
@@ -107,15 +137,43 @@
         </label>
         <button id="countdownTest" class="btn">Tes tik</button>
       </div>
-      <p class="hint">Alarm berbunyi lewat jendela kontrol ini (komputer operator).</p>
+      <p class="hint">Alarm berbunyi lewat jendela kontrol ini (komputer operator). Format: mp3, wav, ogg, m4a, aac, flac (maks 15 MB). Filenya disalin ke penyimpanan aplikasi.</p>
+    </section>
+
+    <section class="card" id="serverCard">
+      <h2>Server lokal (OBS Browser Source &amp; remote HP)</h2>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="serverEnabled" /> Aktifkan server lokal</label>
+        <label>Port <input type="number" id="serverPort" min="1024" max="65535" /></label>
+        <label class="chk"><input type="checkbox" id="serverLan" /> Izinkan perangkat lain di jaringan (WiFi) yang sama, untuk remote HP</label>
+      </div>
+      <p class="hint" id="serverMsg"></p>
+      <div id="serverUrls" class="urls"></div>
+      <div id="serverPhone" class="phone" hidden>
+        <img id="serverQr" alt="QR remote HP" hidden />
+        <div>
+          <p class="hint">Remote HP: buka alamat ini di HP (harus satu WiFi dengan komputer), lalu masukkan PIN.</p>
+          <div class="urlrow"><code id="phoneUrl"></code> <button class="btn sm" id="phoneCopy">Salin</button></div>
+          <p>PIN: <b id="serverPin" class="pinbox"></b> <button class="btn sm" id="pinNew">PIN baru</button></p>
+        </div>
+      </div>
+      <p class="hint">OBS: tambah sumber <b>Browser</b>, tempel URL di atas, atur lebar/tinggi sesuai kanvas, lalu hapus centang "Shutdown source when not visible" bila perlu. Latar transparan juga bekerja di sini. Server ini hanya menerima perintah Mulai/Jeda/Reset/Atur waktu/Segmen, bukan pengaturan aplikasi.</p>
     </section>
 
     <section class="card">
-      <h2>Hotkey (saat jendela ini aktif)</h2>
-      <p class="hint"><b>Spasi</b> mulai/jeda semua &nbsp; <b>1</b> mulai/jeda Timer A &nbsp; <b>2</b> mulai/jeda Timer B &nbsp; <b>R</b> reset semua</p>
+      <h2>Hotkey</h2>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="hotkeyGlobal" /> Hotkey global: tetap jalan walau aplikasi tidak sedang aktif</label>
+        <button id="hotkeyReset" class="btn sm">Kembalikan bawaan</button>
+      </div>
+      <p class="hint">Klik tombol pintasan lalu tekan tombol baru. <b>Esc</b> batal, <b>Backspace</b> atau <b>Delete</b> mengosongkan. Hotkey global hanya untuk pintasan dengan Ctrl/Alt/Shift atau tombol F1-F24; tombol biasa (spasi, huruf, angka) hanya jalan saat jendela ini aktif.</p>
+      <div id="hotkeyList" class="hklist"></div>
+      <p class="hint" id="hotkeyMsg"></p>
     </section>
   </main>
 
+  <script src="../hotkeys.js"></script>
+  <script src="timefmt.js"></script>
   <script src="control.js"></script>
 </body>
 </html>

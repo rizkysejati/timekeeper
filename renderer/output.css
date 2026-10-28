@@ -14,10 +14,14 @@ body.windowed.frameless { -webkit-app-region: drag; } /* tanpa bingkai: geser de
 .label { font-weight: 600; letter-spacing: .04em; opacity: .9; }
 .time { font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; white-space: nowrap; }
 
-.one .time { font-size: min(36vh, 24vw); }
+.one .time { font-size: calc(min(36vh, 24vw) * var(--scale, 1)); }
 .one .label { font-size: min(8vh, 6vw); margin-bottom: 2vh; }
-.two .time { font-size: min(30vh, 13vw); }
+.two .time { font-size: calc(min(30vh, 13vw) * var(--scale, 1)); }
 .two .label { font-size: min(7vh, 4vw); margin-bottom: 2vh; }
+
+.seg { font-weight: 500; opacity: .85; margin-bottom: 1.5vh; }
+.one .seg { font-size: min(6vh, 4.5vw); }
+.two .seg { font-size: min(5vh, 3vw); }
 
 .blink { animation: blink .6s steps(2, start) infinite; }
 @keyframes blink { 50% { opacity: .25; } }
